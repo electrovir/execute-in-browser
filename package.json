@@ -1,6 +1,6 @@
 {
     "name": "execute-in-browser",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Directly run a single file in a browser.",
     "keywords": [],
     "homepage": "https://github.com/electrovir/execute-in-browser",

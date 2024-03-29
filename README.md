@@ -10,5 +10,5 @@ Do not install this globally, that is not supported yet.
 cd path/to/your/repo
 npm i execute-in-browser
 
-b-run path/to/file/to/run.ts
+npx b-run path/to/file/to/run.ts
 ```
