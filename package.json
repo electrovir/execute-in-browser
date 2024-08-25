@@ -1,6 +1,6 @@
 {
     "name": "execute-in-browser",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Directly run a single file in a browser.",
     "keywords": [
         "execute",
@@ -42,6 +42,7 @@
         "@augment-vir/node-js": "^29.3.0",
         "@virmator/frontend": "^13.3.3",
         "cli-args-vir": "^0.0.3",
+        "package-up": "^5.0.0",
         "portfinder": "^1.0.32",
         "tsx": "^4.18.0",
         "vite": "^5.4.2",

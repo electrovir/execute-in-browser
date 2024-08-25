@@ -3,17 +3,28 @@
 import {log, writeFileAndDir} from '@augment-vir/node-js';
 import {alwaysReloadPlugin} from '@virmator/frontend/dist/always-reload.vite';
 import {extractRelevantArgs} from 'cli-args-vir';
-import {basename, extname, join, relative} from 'node:path';
+import {basename, dirname, extname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {packageUp} from 'package-up';
 import {getPortPromise} from 'portfinder';
 import {createServer} from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import {outputDir} from './file-paths.js';
 import {createHtmlFileContents} from './html-output.js';
 
 async function runFileInBrowser(scriptPath: string) {
+    const packageJsonPath = await packageUp();
+    if (!packageJsonPath) {
+        throw new Error(`Failed to find a package.json file for script '${scriptPath}'`);
+    }
+    const packageDir = dirname(packageJsonPath);
+
     const scriptName = basename(scriptPath);
-    const htmlPath = join(outputDir, `${scriptName.replace(extname(scriptName), '')}.html`);
+    const htmlPath = join(
+        packageDir,
+        'node_modules',
+        '.execute-in-browser',
+        `${scriptName.replace(extname(scriptName), '')}.html`,
+    );
 
     await writeFileAndDir(htmlPath, createHtmlFileContents({htmlPath, scriptPath}));
 
