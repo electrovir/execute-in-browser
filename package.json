@@ -1,15 +1,19 @@
 {
     "name": "execute-in-browser",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Directly run a single file in a browser.",
-    "keywords": [],
+    "keywords": [
+        "execute",
+        "script",
+        "browser"
+    ],
     "homepage": "https://github.com/electrovir/execute-in-browser",
     "bugs": {
         "url": "https://github.com/electrovir/execute-in-browser/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/electrovir/execute-in-browser"
+        "url": "git+https://github.com/electrovir/execute-in-browser.git"
     },
     "license": "(MIT or CC0 1.0)",
     "author": {
@@ -17,44 +21,65 @@
         "url": "https://github.com/electrovir"
     },
     "type": "module",
-    "module": "dist/index.js",
-    "types": "dist/index.d.ts",
     "bin": {
-        "b-run": "./run-with-tsx.sh"
+        "b-run": "src/cli.ts"
     },
     "scripts": {
+        "compile": "virmator compile",
         "format": "virmator format",
-        "publish": "virmator publish \"npm run test:all\"",
-        "test:all": "concurrently --colors --kill-others-on-fail -c auto --names types,spelling,format,deps \"npm run test:types\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:deps\"",
+        "lint": "virmator lint fix src",
+        "publish": "virmator publish npm run test:all",
+        "test": "tsx src/cli.ts test-files/simple.script.ts",
+        "test:all": "npm run compile && concurrently --colors --kill-others-on-fail -c auto --names spelling,format,deps,lint \"npm run test:spelling\" \"npm run test:format\" \"npm run test:deps\" \"npm run test:lint\"",
         "test:deps": "virmator deps check",
         "test:format": "virmator format check",
+        "test:lint": "virmator lint src",
         "test:spelling": "virmator spellcheck",
-        "test:types": "tsc --noEmit"
+        "test:update": "npm run test update"
     },
     "dependencies": {
-        "@augment-vir/common": "^26.2.1",
-        "@augment-vir/node-js": "^26.2.1",
-        "cli-args-vir": "^0.0.2",
+        "@augment-vir/common": "^29.3.0",
+        "@augment-vir/node-js": "^29.3.0",
+        "@virmator/frontend": "^13.3.3",
+        "cli-args-vir": "^0.0.3",
         "portfinder": "^1.0.32",
-        "tsx": "^4.7.1",
-        "vite": "^5.2.7",
-        "vite-tsconfig-paths": "^4.3.2"
+        "tsx": "^4.18.0",
+        "vite": "^5.4.2",
+        "vite-tsconfig-paths": "^5.0.1"
     },
     "devDependencies": {
-        "@types/node": "^20.11.30",
-        "cspell": "^8.6.1",
-        "dependency-cruiser": "^16.2.4",
-        "esbuild": "^0.20.2",
-        "npm-check-updates": "~16.12.3",
-        "prettier": "^3.2.5",
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.9.0",
+        "@stylistic/eslint-plugin": "^2.6.4",
+        "@stylistic/eslint-plugin-ts": "^2.6.4",
+        "@types/node": "^22.5.0",
+        "@typescript-eslint/eslint-plugin": "^8.2.0",
+        "cspell": "^8.14.2",
+        "dependency-cruiser": "^16.4.0",
+        "esbuild": "^0.23.1",
+        "eslint": "^9.9.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-jsdoc": "^50.2.2",
+        "eslint-plugin-monorepo-cop": "^1.0.2",
+        "eslint-plugin-playwright": "^1.6.2",
+        "eslint-plugin-prettier": "^5.2.1",
+        "eslint-plugin-require-extensions": "^0.1.3",
+        "eslint-plugin-sonarjs": "^1.0.4",
+        "eslint-plugin-unicorn": "^55.0.0",
+        "npm-check-updates": "^17.1.0",
+        "prettier": "^3.3.3",
         "prettier-plugin-interpolated-html-tags": "^1.0.5",
         "prettier-plugin-jsdoc": "^1.3.0",
-        "prettier-plugin-multiline-arrays": "^3.0.4",
-        "prettier-plugin-organize-imports": "^3.2.4",
-        "prettier-plugin-packagejson": "^2.4.13",
+        "prettier-plugin-multiline-arrays": "^3.0.6",
+        "prettier-plugin-organize-imports": "^4.0.0",
+        "prettier-plugin-packagejson": "^2.5.2",
         "prettier-plugin-sort-json": "^4.0.0",
         "prettier-plugin-toml": "^2.0.1",
-        "typescript": "5.3.3",
-        "virmator": "^11.5.2"
+        "typescript": "5.5.4",
+        "typescript-eslint": "^8.2.0",
+        "virmator": "^13.3.3"
+    },
+    "engines": {
+        "node": ">=18"
     }
 }

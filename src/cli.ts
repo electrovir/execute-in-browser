@@ -1,29 +1,25 @@
-import {randomString} from '@augment-vir/common';
-import {log} from '@augment-vir/node-js';
+#!/usr/bin/env -S npx tsx
+
+import {log, writeFileAndDir} from '@augment-vir/node-js';
+import {alwaysReloadPlugin} from '@virmator/frontend/dist/always-reload.vite';
 import {extractRelevantArgs} from 'cli-args-vir';
-import {mkdir, writeFile} from 'node:fs/promises';
-import {dirname, join, relative} from 'node:path';
+import {basename, extname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {getPortPromise} from 'portfinder';
-import {alwaysReloadPlugin} from 'virmator/dist/compiled-base-configs/vite-always-reload-plugin';
 import {createServer} from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import {tempDir} from './file-paths';
-import {createHtmlFileContents} from './html-output';
+import {outputDir} from './file-paths.js';
+import {createHtmlFileContents} from './html-output.js';
 
 async function runFileInBrowser(scriptPath: string) {
-    const htmlPath = join(tempDir, `index-${randomString(4)}.html`);
+    const scriptName = basename(scriptPath);
+    const htmlPath = join(outputDir, `${scriptName.replace(extname(scriptName), '')}.html`);
 
-    await writeHtmlFile({htmlPath, scriptPath});
+    await writeFileAndDir(htmlPath, createHtmlFileContents({htmlPath, scriptPath}));
 
     const port = await runViteServer(8321, htmlPath);
 
     log.info(`\nOpen URL: http://localhost:${port}/${relative(process.cwd(), htmlPath)}\n`);
-}
-
-async function writeHtmlFile({htmlPath, scriptPath}: {htmlPath: string; scriptPath: string}) {
-    await mkdir(dirname(htmlPath), {recursive: true});
-    await writeFile(htmlPath, createHtmlFileContents({htmlPath, scriptPath}));
 }
 
 async function runViteServer(startingPort: number, htmlPath: string) {
@@ -56,7 +52,6 @@ async function runViteServer(startingPort: number, htmlPath: string) {
 }
 
 async function cli(rawArgs: ReadonlyArray<string>) {
-    console.log(fileURLToPath(import.meta.url), process.argv);
     const [scriptPath] = extractRelevantArgs({
         rawArgs,
         binName: 'b-run',
@@ -70,4 +65,4 @@ async function cli(rawArgs: ReadonlyArray<string>) {
     await runFileInBrowser(scriptPath);
 }
 
-cli(process.argv);
+await cli(process.argv);

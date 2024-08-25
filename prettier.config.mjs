@@ -1,4 +1,4 @@
-import {basePrettierConfig} from 'virmator/base-configs/base-prettierrc.js';
+import {basePrettierConfig} from '@virmator/format/configs/prettier.config.base.mjs';
 
 /**
  * @typedef {import('prettier-plugin-multiline-arrays').MultilineArrayOptions} MultilineOptions
