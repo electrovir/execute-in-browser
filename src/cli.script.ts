@@ -1,8 +1,8 @@
 #!/usr/bin/env -S npx tsx
 
-import {log, writeFileAndDir} from '@augment-vir/node-js';
+import {log} from '@augment-vir/common';
+import {extractRelevantArgs, writeFileAndDir} from '@augment-vir/node';
 import {alwaysReloadPlugin} from '@virmator/frontend/dist/always-reload.vite';
-import {extractRelevantArgs} from 'cli-args-vir';
 import {basename, dirname, extname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {packageUp} from 'package-up';
