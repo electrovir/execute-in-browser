@@ -1,13 +1,12 @@
-#!/usr/bin/env -S npx tsx
-
-import {log} from '@augment-vir/common';
+import {log, mergeDeep} from '@augment-vir/common';
 import {extractRelevantArgs, writeFileAndDir} from '@augment-vir/node';
+import {defineConfig} from '@virmator/frontend/configs/vite.config.base.js';
 import {alwaysReloadPlugin} from '@virmator/frontend/dist/always-reload.vite';
-import {basename, dirname, extname, join, relative} from 'node:path';
+import {basename, dirname, extname, join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {packageUp} from 'package-up';
 import {getPortPromise} from 'portfinder';
-import {createServer} from 'vite';
+import {createServer, type UserConfig} from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import {createHtmlFileContents} from './html-output.js';
 
@@ -38,24 +37,35 @@ async function runViteServer(startingPort: number, htmlPath: string) {
         port: startingPort,
     });
 
-    const server = await createServer({
-        clearScreen: false,
-        configFile: false,
-        root: process.cwd(),
-        server: {
-            port: selectedPort,
+    const config = (await defineConfig(
+        {
+            forGitHubPages: false,
+            packageDirPath: resolve(import.meta.dirname, '..'),
         },
-        plugins: [
-            alwaysReloadPlugin(),
-            tsconfigPaths(),
-        ],
-        build: {
-            rollupOptions: {
-                input: {
-                    main: htmlPath,
+        (baseConfig) => {
+            return mergeDeep(baseConfig, {
+                root: process.cwd(),
+                server: {
+                    port: selectedPort,
                 },
-            },
+                plugins: [
+                    alwaysReloadPlugin(),
+                    tsconfigPaths(),
+                ],
+                build: {
+                    rollupOptions: {
+                        input: {
+                            main: htmlPath,
+                        },
+                    },
+                },
+            });
         },
+    )) as UserConfig;
+
+    const server = await createServer({
+        ...config,
+        configFile: false,
     });
     await server.listen();
 

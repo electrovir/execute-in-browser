@@ -1,6 +1,6 @@
 {
     "name": "execute-in-browser",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "Directly run a single file in a browser.",
     "keywords": [
         "execute",
