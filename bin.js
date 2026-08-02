@@ -3,6 +3,8 @@
 import {runCliScript} from '@augment-vir/node';
 import {join} from 'node:path';
 
-const cliPath = join(import.meta.dirname, 'src', 'cli.script.ts');
-
-await runCliScript(cliPath, import.meta.filename, 'b-run');
+await runCliScript({
+    scriptPath: join(import.meta.dirname, 'src', 'cli.script.ts'),
+    cliScriptFilePath: import.meta.filename,
+    binName: 'b-run',
+});

@@ -2,10 +2,12 @@
 .not-committed/
 *.book.*
 *.d.ts.map
-*.example.ts
+*.example.*
+*.mock.*
 *.test.*
 *.tgz
 **/*/test/
+/configs/
 /coverage/
 /cspell.config.cjs
 /graphics/
@@ -14,7 +16,7 @@
 /www-static/
 bash-scripts/
 dist-docs/
-eslint.config.mjs
+eslint.config.ts
 generated-config-*
 index.html
 prettier.config.mjs

@@ -1,7 +1,7 @@
 import {log, mergeDeep} from '@augment-vir/common';
 import {extractRelevantArgs, writeFileAndDir} from '@augment-vir/node';
 import {defineConfig} from '@virmator/frontend/configs/vite.config.base.js';
-import {alwaysReloadPlugin} from '@virmator/frontend/dist/always-reload.vite';
+import {alwaysReloadPlugin} from '@virmator/frontend/dist/always-reload.vite.js';
 import {basename, dirname, extname, join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {packageUp} from 'package-up';
@@ -25,7 +25,13 @@ async function runFileInBrowser(scriptPath: string) {
         `${scriptName.replace(extname(scriptName), '')}.html`,
     );
 
-    await writeFileAndDir(htmlPath, createHtmlFileContents({htmlPath, scriptPath}));
+    await writeFileAndDir(
+        htmlPath,
+        createHtmlFileContents({
+            htmlPath,
+            scriptPath,
+        }),
+    );
 
     const port = await runViteServer(8321, htmlPath);
 
